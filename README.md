@@ -1,4 +1,4 @@
- <img src="https://github.com/moyinoluwalogo/flutter_liveness_capture/raw/master/assets/liveness.png" alt="image"/>
+ <img src="https://github.com/moyinoluwalogo/flutter_liveness_capture/raw/main/assets/liveness.png"  alt="image"/>
 
 A highly customizable Flutter package for face liveness detection with configurable challenge types and auto-capture. Detect real human presence — not a photo, video, or mask — using challenges like smile, blink, and head turns, with animated visual feedback and built-in photo capture on success.
 
