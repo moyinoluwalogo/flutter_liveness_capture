@@ -1,3 +1,7 @@
+## 0.0.2
+
+* Bumped camera and ML Kit dependency versions.
+
 ## 0.0.1
 
 * Initial release.
