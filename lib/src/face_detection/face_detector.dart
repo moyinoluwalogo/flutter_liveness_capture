@@ -84,6 +84,9 @@ class FaceDetectorScreen extends StatefulWidget {
 
   /// Padding around the content column.
   final EdgeInsetsGeometry? contextPadding;
+
+  final void Function(CameraController controller)? onController;
+
   const FaceDetectorScreen({
     super.key,
     required this.onRulesetCompleted,
@@ -107,6 +110,7 @@ class FaceDetectorScreen extends StatefulWidget {
     this.contextPadding,
     this.cameraSize = const Size(200, 200),
     this.pauseDurationInSeconds = 5,
+    this.onController,
   }) : assert(ruleset.length != 0, 'Ruleset cannot be empty');
 
   @override
@@ -330,7 +334,10 @@ class _FaceDetectorScreenState extends State<FaceDetectorScreen>
                 decoration: BoxDecoration(shape: BoxShape.circle),
                 child: DetectorView(
                   cameraSize: widget.cameraSize,
-                  onController: (controller_) => controller = controller_,
+                  onController: (controller_) {
+                    controller = controller_;
+                    widget.onController?.call(controller_);
+                  },
                   title: 'Face Detector',
                   text: _text,
                   onImage: _processImage,
