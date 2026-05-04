@@ -1,3 +1,6 @@
+## 0.0.4
+* Add onController callback to FaceDetectorScreen for CameraController access
+
 ## 0.0.3
 
 * Add liveness.png image asset
