@@ -2,7 +2,7 @@ name: liveness_capture
 description: A Flutter package for face liveness detection with configurable
   challenge types and auto-capture. Detect real human presence using smile,
   blink, and head turns.
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/moyinoluwalogo/flutter_liveness_capture
 issue_tracker: https://github.com/moyinoluwalogo/flutter_liveness_capture/issues
 topics:

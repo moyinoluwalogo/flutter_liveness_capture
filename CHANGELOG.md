@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Add liveness.png image asset
+
 ## 0.0.2
 
 * Bumped camera and ML Kit dependency versions.
