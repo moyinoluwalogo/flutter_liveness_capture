@@ -38,7 +38,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  live_photo_capture: ^0.0.1
+  liveness_capture: ^0.0.1
 ```
 
 Then run:
@@ -49,7 +49,7 @@ flutter pub get
 ## Usage
 
 ```dart
-import 'package:live_photo_capture/livephotocapture.dart';
+import 'package:liveness_capture/liveness_capture.dart';
 
 FaceDetectorScreen(
   // Called each time a liveness rule is completed

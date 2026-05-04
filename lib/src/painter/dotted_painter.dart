@@ -1,11 +1,26 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+/// A [CustomPainter] that draws a dotted ring around a circular face frame.
+///
+/// Dots are drawn evenly spaced around a circle. Dots from index 0 up to
+/// `progress * totalDots` are painted with [activeProgressColor]; the rest
+/// use [progressColor]. This creates a visual progress indicator that fills
+/// clockwise as the user completes liveness challenges.
 class DottedCirclePainter extends CustomPainter {
+  /// Fraction of the ring to colour as active, in the range [0.0, 1.0].
   final double progress;
+
+  /// Total number of dots drawn around the ring. Defaults to 60.
   final int totalDots;
+
+  /// Radius of each individual dot in logical pixels. Defaults to 3.0.
   final double dotRadius;
+
+  /// Color used for dots that represent completed progress.
   final Color? activeProgressColor;
+
+  /// Color used for dots that represent remaining progress.
   final Color? progressColor;
 
   DottedCirclePainter({

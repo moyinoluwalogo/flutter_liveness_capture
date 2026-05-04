@@ -5,6 +5,12 @@ description: A Flutter package for face liveness detection with configurable
 version: 0.0.1
 repository: https://github.com/moyinoluwalogo/flutter_liveness_capture
 issue_tracker: https://github.com/moyinoluwalogo/flutter_liveness_capture/issues
+topics:
+  - face-detection
+  - liveness
+  - camera
+  - biometrics
+  - photo
 
 environment:
   sdk: ^3.11.1

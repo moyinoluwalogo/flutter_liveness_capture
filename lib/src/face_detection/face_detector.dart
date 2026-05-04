@@ -2,7 +2,6 @@ import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:camera/camera.dart';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,25 +12,77 @@ import 'package:liveness_capture/src/debouncer/debouncer.dart';
 import 'package:liveness_capture/src/detector_view/detector_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+/// The main widget for real-time face liveness detection.
+///
+/// Displays a camera preview with an animated dotted progress ring and guides
+/// the user through a configurable sequence of [Rulesets] challenges. When all
+/// challenges have been completed, [onValidationDone] is called with the active
+/// [CameraController] so the caller can capture a photo.
+///
+/// ### Minimal usage
+/// ```dart
+/// FaceDetectorScreen(
+///   onRulesetCompleted: (ruleset) => debugPrint('Done: $ruleset'),
+///   onValidationDone: (controller) {
+///     return ElevatedButton(
+///       onPressed: () async => await controller?.takePicture(),
+///       child: const Text('Capture'),
+///     );
+///   },
+///   child: ({required state, required countdown, required hasFace}) {
+///     return Text(hasFace ? 'Hold still… $countdown' : 'Show your face');
+///   },
+/// )
+/// ```
 class FaceDetectorScreen extends StatefulWidget {
+  /// Seconds to pause between ruleset steps. Defaults to 5.
   final int pauseDurationInSeconds;
+
+  /// Size of the circular camera preview. Defaults to 200×200.
   final Size cameraSize;
+
+  /// Called with `true` when all validations pass, `false` otherwise.
   final Function(bool validated)? onSuccessValidation;
+
+  /// Called each time a single ruleset challenge is completed.
   final void Function(Rulesets ruleset)? onRulesetCompleted;
+
+  /// Ordered list of liveness challenges to perform. Must not be empty.
   final List<Rulesets> ruleset;
+
+  /// Color of dots that represent completed progress in the ring.
   final Color activeProgressColor;
+
+  /// Color of dots that represent remaining progress in the ring.
   final Color progressColor;
 
+  /// Builder for the overlay widget shown during liveness challenges.
+  ///
+  /// Receives the current [Rulesets] state, the remaining [countdown] seconds,
+  /// and whether a [hasFace] is detected in frame.
   final Widget Function({
     required Rulesets state,
     required int countdown,
     required bool hasFace,
   })
   child;
+
+  /// Builder for the widget shown after all challenges pass.
+  ///
+  /// Receives the active [CameraController] (may be `null`) so the caller
+  /// can call [CameraController.takePicture].
   final Widget Function(CameraController? controller) onValidationDone;
+
+  /// Total number of dots in the progress ring. Defaults to 60.
   final int totalDots;
+
+  /// Radius of each dot in logical pixels. Defaults to 3.
   final double dotRadius;
+
+  /// Background color of the widget. Defaults to [Colors.white].
   final Color? backgroundColor;
+
+  /// Padding around the content column.
   final EdgeInsetsGeometry? contextPadding;
   const FaceDetectorScreen({
     super.key,
@@ -696,7 +747,7 @@ class _FaceDetectorScreenState extends State<FaceDetectorScreen>
 
   List<double> getDeterministicEmbedding(Face face) {
     final seed = (face.boundingBox.left + face.boundingBox.top).toInt();
-    final rand = Random(seed);
+    final rand = math.Random(seed);
     return List.generate(10, (index) => rand.nextDouble());
   }
 
@@ -711,12 +762,16 @@ class _FaceDetectorScreenState extends State<FaceDetectorScreen>
   double compareEmbeddings(List<double> e1, List<double> e2) {
     double sum = 0;
     for (int i = 0; i < e1.length; i++) {
-      sum += pow(e1[i] - e2[i], 2).toDouble();
+      sum += math.pow(e1[i] - e2[i], 2).toDouble();
     }
-    return sqrt(sum); // Euclidean distance
+    return math.sqrt(sum); // Euclidean distance
   }
 }
 
+/// Utility class for requesting camera permission at runtime.
+///
+/// Deduplicates concurrent requests so only one OS permission dialog is shown
+/// even when called from multiple widgets simultaneously.
 class PermissionManager {
   static Future<void>? _ongoingRequest;
 
