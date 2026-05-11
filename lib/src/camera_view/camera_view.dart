@@ -147,17 +147,6 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
     }
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.resumed && _controller == null) {
-  //     // Try initializing camera again after permission dialog
-  //     _initCamera();
-  //   } else if (state == AppLifecycleState.inactive ||
-  //       state == AppLifecycleState.paused) {
-  //     _stopLiveFeed();
-  //   }
-  // }
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -177,10 +166,6 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
     if (_controller == null || _controller!.value.isCaptureOrientationLocked) {
       return Container();
     }
-
-    // Prevent using disposed controller
-
-    widget.onController?.call(_controller!);
 
     return SizedBox(
       height: widget.cameraSize.height,
@@ -303,22 +288,21 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
   }
 
   Future<void> _stopLiveFeed() async {
-    if (_controller != null) {
+    final controller = _controller;
+    _controller = null; // Null out immediately so builds see null right away
+    if (controller != null) {
       try {
-        if (_controller!.value.isStreamingImages) {
-          await _controller!.stopImageStream();
+        if (controller.value.isStreamingImages) {
+          await controller.stopImageStream();
         }
       } on CameraException catch (e) {
         debugPrint('CameraException while stopping stream: $e');
       }
-
       try {
-        await _controller!.dispose();
+        await controller.dispose();
       } on CameraException catch (e) {
         debugPrint('CameraException while disposing: $e');
       }
-
-      _controller = null;
     }
   }
 
