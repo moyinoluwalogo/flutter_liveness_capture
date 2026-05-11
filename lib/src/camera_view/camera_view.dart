@@ -289,7 +289,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
 
   Future<void> _stopLiveFeed() async {
     final controller = _controller;
-    _controller = null; // Null out immediately so builds see null right away
+    _controller = null;
+    if (mounted) setState(() {});
     if (controller != null) {
       try {
         if (controller.value.isStreamingImages) {

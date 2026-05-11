@@ -1,3 +1,11 @@
+## 0.0.6
+
+* Improve null handling in _CameraViewState
+
+## 0.0.5
+
+* Refactor camera controller handling in _CameraViewState to improve null safety and code clarity
+
 ## 0.0.4
 * Add onController callback to FaceDetectorScreen for CameraController access
 
